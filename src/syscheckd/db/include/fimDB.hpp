@@ -14,6 +14,7 @@
 #include "dbsync.hpp"
 #include "rsync.hpp"
 #include "fimCommonDefs.h"
+#include "commonDefs.h"
 #include <condition_variable>
 #include <mutex>
 
@@ -23,6 +24,12 @@ extern "C"
 #include "logging_helper.h"
 }
 #endif
+
+
+constexpr auto QUEUE_SIZE
+{
+    4096
+};
 
 constexpr auto CREATE_FILE_DB_STATEMENT
 {
@@ -306,6 +313,7 @@ class FIMDB
             m_stopping = true;
         };
 
+        DBSyncTxn startDBSyncTxn(const std::string& table);
 
     private:
 

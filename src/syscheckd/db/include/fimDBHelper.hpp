@@ -13,6 +13,7 @@
 #define _FIMDBHELPER_HPP
 #include "fimDB.hpp"
 #include "dbItem.hpp"
+#include "commonDefs.h"
 
 namespace FIMDBHelper
 {
@@ -219,6 +220,17 @@ namespace FIMDBHelper
         query["query"]["count_opt"] = 100;
 
         return query;
+    }
+
+    template<typename T>
+    DBSyncTxn startDBSyncTxn(const std::string& table) {
+        return T::getInstance().startDBSyncTxn(table);
+    }
+
+    template<typename T>
+    void TxnSyncRow(DBSyncTxn dbsyncTxn, const DBItem& syncItem)
+    {
+        dbsyncTxn.syncTxnRow(*syncItem.toJSON());
     }
 }
 

@@ -166,3 +166,25 @@ void FIMDB::executeQuery(const nlohmann::json& item, ResultCallbackData callback
 {
     m_dbsyncHandler->selectRows(item, callbackData);
 }
+
+
+DBSyncTxn FIMDB::startDBSyncTxn(const std::string& table)
+{
+    const auto callback
+    {
+        [this](ReturnTypeCallback result, const nlohmann::json & data)
+        {
+            // notifyChange(result, data, PROCESSES_TABLE);
+        }
+    };
+    DBSyncTxn txn
+    {
+        m_dbsyncHandler->handle(),
+        nlohmann::json{table},
+        0,
+        QUEUE_SIZE,
+        callback
+    };
+
+    return txn;
+}

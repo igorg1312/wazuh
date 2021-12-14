@@ -43,7 +43,7 @@ struct FimFileDataDeleter
 class FileItem final : public DBItem
 {
     public:
-        FileItem(fim_entry* const fim)
+        FileItem(const fim_entry* fim)
             : DBItem(std::string(fim->file_entry.path)
                      , fim->file_entry.data->scanned
                      , fim->file_entry.data->last_event
@@ -135,7 +135,7 @@ class FileItem final : public DBItem
             return m_fimEntry.get();
         };
 
-        nlohmann::json* toJSON()
+        const nlohmann::json* toJSON() const
         {
             return m_statementConf.get();
         };

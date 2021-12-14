@@ -488,16 +488,12 @@ int fim_db_get_path_from_pattern(fdb_t* fim_sql, const char* pattern, fim_tmp_fi
     return ret;
 }
 
-int fim_db_file_update(fdb_t* fim_sql, const char* path, const fim_file_data* data, fim_entry** saved)
+int fim_db_file_update(fdb_t* fim_sql, const char* path, const fim_file_data* data, fim_entry* saved)
 {
     int retval;
-    assert(saved != NULL);
-
     w_mutex_lock(&fim_sql->mutex);
-    *saved = _fim_db_get_path(fim_sql, path);
 
-
-    if (*saved == NULL)
+    if (saved == NULL)
     {
         switch (fim_db_check_limit(fim_sql))
         {
@@ -516,7 +512,7 @@ int fim_db_file_update(fdb_t* fim_sql, const char* path, const fim_file_data* da
                 break;
         }
     }
-    else if (strcmp(data->checksum, (*saved)->file_entry.data->checksum) == 0)
+    else if (strcmp(data->checksum, saved->file_entry.data->checksum) == 0)
     {
         // Entry up to date
         retval = fim_db_set_scanned(fim_sql, path);
